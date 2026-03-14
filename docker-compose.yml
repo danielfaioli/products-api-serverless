@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-produtos
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "SenhaForte123!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'SenhaForte123!' -Q 'SELECT 1' -No || /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'SenhaForte123!' -Q 'SELECT 1'",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # Nota: Azurite não emula Azure Service Bus Topics.
+  # Para testar os triggers Service Bus localmente:
+  # 1. Crie um namespace Service Bus gratuito (Basic não suporta Topics, use Standard)
+  #    no portal Azure: https://portal.azure.com
+  # 2. Configure a variável de ambiente SERVICEBUS_CONNECTION_STRING com a
+  #    connection string do namespace criado
+  # 3. Crie o topic "produtos" e as subscriptions sub-criar, sub-atualizar, sub-deletar
+  #    com os filtros SQL correspondentes (veja infra/setup.sh)
+  #
+  # Alternativamente, use Azure Functions Core Tools + Azurite para testar
+  # os HTTP triggers (leitura) sem necessidade de Service Bus real.
+
+volumes:
+  sqlserver_data:
