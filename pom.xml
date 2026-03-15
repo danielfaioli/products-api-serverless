@@ -117,6 +117,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <jvmArgs>-Dnet.bytebuddy.experimental=true</jvmArgs>
+                </configuration>
             </plugin>
 
             <!-- Compilador Java 21 -->
