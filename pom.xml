@@ -80,6 +80,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- OpenAPI + Swagger UI -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+
         <!-- H2 para testes em memória -->
         <dependency>
             <groupId>io.quarkus</groupId>
